@@ -9,10 +9,6 @@ pipeline AirportPipeline {
         delimiter: ";";
 
         }
-    block NameHeaderWriter oftype CellWriter {
-        at: cell A1;
-        write: [ "geo_punkt"];
-    }
 
     block AirportTableInterpreter oftype TableInterpreter {
         header: true;
@@ -29,7 +25,7 @@ pipeline AirportPipeline {
             "Zeitzone" oftype decimal,
             "DST" oftype text,
             "Zeitzonen-Datenbank" oftype text,
-            "geo_punkt" oftype decimal  
+            "geo_punkt" oftype text  
         ];
     }
 
@@ -41,7 +37,7 @@ pipeline AirportPipeline {
     AirportExtractor
         -> AirportTextFileInterpreter
         -> AirportCSVInterpreter
-        -> NameHeaderWriter
+
         -> AirportTableInterpreter
         -> DatabaseLoader;
 }
