@@ -1,0 +1,73 @@
+pipeline AirportPipeline {
+    block AirportExtractor oftype HttpExtractor {
+        url: "https://opendata.rhein-kreis-neuss.de/api/v2/catalog/datasets/stadt-neuss-herbstpflanzung-2023/exports/csv";
+    }
+
+    block AirportTextFileInterpreter oftype TextFileInterpreter {}
+    
+    block AirportCSVInterpreter oftype CSVInterpreter {
+        delimiter: ";";
+
+        }
+         block MpgColumnDeleter oftype ColumnDeleter {
+   delete: [column A];
+ }
+  block AirportTableInterpreter oftype TableInterpreter {
+        header: true;
+        columns: [
+        "baumart_botanisch" oftype text,
+        "id" oftype idconstrains,
+        "baumfamilie" oftype text,
+         "standort" oftype text,
+        "stadtteil"oftype stadtcontrains,
+        "lfd_nr" oftype integer,
+
+
+
+
+        ];
+    }
+
+    block DatabaseLoader oftype SQLiteLoader {
+        table: "trees";
+        file: "./trees.sqlite";
+    }
+
+    AirportExtractor
+    
+        -> AirportTextFileInterpreter
+        
+        -> AirportCSVInterpreter
+        ->MpgColumnDeleter
+        -> AirportTableInterpreter
+
+        
+        -> DatabaseLoader;
+        
+}
+
+valuetype idconstrains oftype text {
+    // 10. Valuetypes can be further refined by providing constraints.
+    constraints: [
+        idformat,
+        // ExactlyTenCharacters,
+    ];
+}
+
+
+valuetype stadtcontrains oftype text {
+    // 10. Valuetypes can be further refined by providing constraints.
+    constraints: [
+        furthfoemat,
+        // ExactlyTenCharacters,
+    ];
+}
+
+ constraint idformat oftype RegexConstraint {
+   regex: /^\d{1,3}\.\d+,\s*\d{1,3}\.\d+$/;
+ }
+
+
+ constraint furthfoemat oftype RegexConstraint {
+   regex: /^Furth-.*/;
+ }
