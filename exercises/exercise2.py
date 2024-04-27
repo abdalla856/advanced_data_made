@@ -21,9 +21,10 @@ if response.status_code == 200:
         df.drop('baumart_deutsch', axis=1, inplace=True)
     # print(df.isnull().sum())    
     sqlite_types = {
+        # "baumart_botanisch": types.TEXT(),
+
         "id": types.TEXT(),
         "baumfamilie": types.TEXT(),
-        "baumart_botanisch": types.TEXT(),
         "standort": types.TEXT(),
         "stadtteil": types.TEXT(),
         "lfd_nr": types.INT()

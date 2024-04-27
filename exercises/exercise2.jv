@@ -15,7 +15,7 @@ pipeline AirportPipeline {
   block AirportTableInterpreter oftype TableInterpreter {
         header: true;
         columns: [
-        "baumart_botanisch" oftype text,
+        // "baumart_botanisch" oftype text,
         "id" oftype idconstrains,
         "baumfamilie" oftype text,
          "standort" oftype text,
@@ -38,7 +38,7 @@ pipeline AirportPipeline {
         -> AirportTextFileInterpreter
         
         -> AirportCSVInterpreter
-        ->MpgColumnDeleter
+        // ->MpgColumnDeleter
         -> AirportTableInterpreter
 
         
