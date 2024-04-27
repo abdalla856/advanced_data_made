@@ -1,18 +1,18 @@
-pipeline AirportPipeline {
-    block AirportExtractor oftype HttpExtractor {
+pipeline TreePipeline {
+    block TreeExtractor oftype HttpExtractor {
         url: "https://opendata.rhein-kreis-neuss.de/api/v2/catalog/datasets/stadt-neuss-herbstpflanzung-2023/exports/csv";
     }
 
-    block AirportTextFileInterpreter oftype TextFileInterpreter {}
+    block TreeTextFileInterpreter oftype TextFileInterpreter {}
     
-    block AirportCSVInterpreter oftype CSVInterpreter {
+    block TreeCSVInterpreter oftype CSVInterpreter {
         delimiter: ";";
 
         }
-         block MpgColumnDeleter oftype ColumnDeleter {
-   delete: [column A];
+         block ReqColumnDeleter oftype ColumnDeleter {
+   delete: [column E ];
  }
-  block AirportTableInterpreter oftype TableInterpreter {
+  block TreeTableInterpreter oftype TableInterpreter {
         header: true;
         columns: [
         "baumart_botanisch" oftype text,
@@ -21,6 +21,7 @@ pipeline AirportPipeline {
          "standort" oftype text,
         "stadtteil"oftype stadtcontrains,
         "lfd_nr" oftype integer,
+        "baumart_deutsch"oftype text,
 
 
 
@@ -33,13 +34,13 @@ pipeline AirportPipeline {
         file: "./trees.sqlite";
     }
 
-    AirportExtractor
+    TreeExtractor
     
-        -> AirportTextFileInterpreter
+        -> TreeTextFileInterpreter
         
-        -> AirportCSVInterpreter
-        // ->MpgColumnDeleter
-        -> AirportTableInterpreter
+        -> TreeCSVInterpreter
+        ->ReqColumnDeleter
+        -> TreeTableInterpreter
 
         
         -> DatabaseLoader;
@@ -51,6 +52,7 @@ valuetype idconstrains oftype text {
     constraints: [
         idformat,
         // ExactlyTenCharacters,
+        invalidRows
     ];
 }
 
@@ -60,6 +62,7 @@ valuetype stadtcontrains oftype text {
     constraints: [
         furthfoemat,
         // ExactlyTenCharacters,
+        invalidRows
     ];
 }
 
@@ -70,4 +73,7 @@ valuetype stadtcontrains oftype text {
 
  constraint furthfoemat oftype RegexConstraint {
    regex: /^Furth-.*/;
+ }
+  constraint invalidRows oftype DenylistConstraint {
+   denylist: ["Nan", " ", "Null"];
  }
