@@ -35,6 +35,22 @@ Short description of the DataSource.
 <!-- List of work packages ordered sequentially, each pointing to an issue with more details. -->
 
 1. Find a dataset for temperature change and sea level change and combine them together . [#1][i1]
-2. ...
+2. Perform data cleaning to address instances where no data is present and handle it. [#2][i2]
+3. Finding common Years in both datasets .  [#3][i3]
+4. Finding The change in temperature over years . [#4][i4]
+5. Finding The change in sea level over years . [#5][i5]
+6. Finding The relation between sea level and temperature . [#6][i6]
 
-[i1]: https://github.com/abdalla856/made-template/issues/1
+
+
+
+[i1]: https://github.com/abdalla856/advanced_data_made/issues/1
+[i2]: https://github.com/abdalla856/advanced_data_made/issues/2
+[i3]: https://github.com/abdalla856/advanced_data_made/issues/3
+[i4]: https://github.com/abdalla856/advanced_data_made/issues/4
+[i5]: https://github.com/abdalla856/advanced_data_made/issues/5
+[i6]: https://github.com/abdalla856/advanced_data_made/issues/5
+
+
+
+
