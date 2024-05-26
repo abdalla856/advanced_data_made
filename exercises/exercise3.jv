@@ -16,7 +16,7 @@ pipeline GoodPipeline {
 
         }
          block MetaRowsDeleter oftype RowDeleter {
-   delete:[ row 1 , row 8 , row 2 , row 3 , row 4 , row 5 , row 6 , row 7 , row 8  ,row 41338 , row 41339 ];
+   delete:[ row 1 , row 8 , row 2 , row 3 , row 4 , row 5 , row 6  ,row 41338 , row 41339 ];
   
 
         
