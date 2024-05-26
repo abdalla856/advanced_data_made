@@ -1,0 +1,96 @@
+
+
+
+
+pipeline GoodPipeline {
+    block GoodExtractor oftype HttpExtractor {
+        url: "https://www-genesis.destatis.de/genesis/downloads/00/tables/46131-0014_00.csv";
+    }
+
+    block GoodTextFileInterpreter oftype TextFileInterpreter {
+        encoding: "latin2";
+    }
+    
+    block GoodCSVInterpreter oftype CSVInterpreter {
+        delimiter: ";";
+
+        }
+         block MetaRowsDeleter oftype RowDeleter {
+   delete:[ row 1 , row 8 , row 2 , row 3 , row 4 , row 5 , row 6 , row 7 , row 8  ,row 41338 , row 41339 ];
+  
+
+        
+ }
+
+ block HeaderSequenceWriter oftype CellWriter {
+   at: range A1:E1; 
+        write: ['year', 'month', 'goods_id', 'goods_name', 'goods_source'];
+    
+ }
+  block HeaderSequenceWriterAt oftype CellWriter {
+   at: range AT1:AU1; 
+        write: ['abroad', 'total'];
+    
+ }
+  block GoodTableInterpreter oftype TableInterpreter {
+        header: true;
+        columns: [
+            'year' oftype PosititveInt,
+            'month' oftype deut_months,
+            'goods_id' oftype V_Ids,
+            'goods_name' oftype text,
+            'goods_source' oftype text,
+            'abroad' oftype PosititveInt,
+            'total' oftype PosititveInt
+        ];
+    }
+
+    block DatabaseLoader oftype SQLiteLoader {
+        table: "goods";
+        file: "./goodsTransportedByTrain.sqlite";
+    }
+
+        GoodExtractor
+        ->GoodTextFileInterpreter
+        ->GoodCSVInterpreter
+        ->MetaRowsDeleter
+        ->HeaderSequenceWriter
+        ->HeaderSequenceWriterAt
+        ->GoodTableInterpreter
+        -> DatabaseLoader;
+        
+}
+
+valuetype PosititveInt oftype integer {
+    constraints : [
+        greaterZero
+    ];
+
+} 
+
+
+
+constraint greaterZero on decimal :
+value > 0;
+
+
+valuetype V_Ids oftype text {
+    constraints : [
+        Ids
+    ]; 
+}
+valuetype deut_months oftype text {
+    constraints : [
+        months
+    ]; 
+}
+
+constraint months on text :
+    value in ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
+
+
+
+
+// must start with NST-7 followed by three numbers or capital letters
+constraint Ids on text :
+    value matches /^NST7-[A-Z0-9]{3}$/;
