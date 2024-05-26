@@ -91,6 +91,6 @@ constraint months on text :
 
 
 
-// must start with NST-7 followed by three numbers or capital letters
+
 constraint Ids on text :
     value matches /^NST7-[A-Z0-9]{3}$/;
