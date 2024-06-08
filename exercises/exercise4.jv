@@ -1,0 +1,83 @@
+
+
+///exe4
+
+pipeline TemperaturePipeline {
+    block TemperatureExtractor oftype HttpExtractor {
+        url: "https://www.mowesta.com/data/measure/mowesta-dataset-20221107.zip";
+    }
+
+
+ block ZipArchiveInterpreter oftype ArchiveInterpreter {
+   archiveType: "zip";
+ }
+    
+    block FilePickerCSV oftype FilePicker {
+        path: "/data.csv";
+    }
+    block TempFIleTextType oftype TextFileInterpreter {
+       
+    }
+
+
+    
+    block TemperatureCSVInterpreter oftype CSVInterpreter {
+        delimiter: ";";
+
+        }
+
+
+    block TempChangeHeader oftype CellWriter {
+        at: range A1:E1; 
+        write: ['id', 'producer', 'model', 'month', 'temperature'];
+    }
+
+
+
+  block TemperatureTableInterpreter oftype TableInterpreter {
+        header: true;
+        columns: [
+            'id' oftype IdConst , 
+            "producer" oftype text,
+            "model" oftype text,
+            "month" oftype text,
+            "temperature" oftype decimal
+            
+        ];
+    }
+// change C to F 
+
+ transform CelsiusToFahrenheit {
+   from Celsius oftype decimal;
+   to Fahrenheit oftype decimal;
+   Fahrenheit: (Celsius * 9/5) + 32;
+ }
+ block CelsiusToFahrenheitTransformer oftype TableTransformer {
+   inputColumns: ['temperature'];
+   outputColumn: 'temperature';
+   use: CelsiusToFahrenheit;
+ }
+    block DatabaseLoader oftype SQLiteLoader {
+        table: "temperatures";
+        file: "./temperatures.sqlite";
+    }
+
+        TemperatureExtractor
+        ->ZipArchiveInterpreter
+        ->FilePickerCSV
+        ->TempFIleTextType
+        ->TemperatureCSVInterpreter
+        ->TempChangeHeader
+        ->TemperatureTableInterpreter
+        ->CelsiusToFahrenheitTransformer
+        -> DatabaseLoader;
+        
+}
+
+constraint ID on integer : value> 0;
+
+valuetype IdConst oftype integer {
+    constraints :[ID];
+}
+
+
