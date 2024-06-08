@@ -1,4 +1,4 @@
 
 
 # Run the tests
-pytest ./test-pipeline.py
+pytest project/test-pipeline.py
