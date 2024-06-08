@@ -28,10 +28,16 @@ pipeline TemperaturePipeline {
 
 
     block TempChangeHeader oftype CellWriter {
-        at: range A1:E1; 
+        at: range A1:E1 ; 
         write: ['id', 'producer', 'model', 'month', 'temperature'];
+    
     }
-
+    // seperated column 
+    block BatteryHeader oftype CellWriter {
+        at: cell J1;
+        write: ['battery_temperature'];
+    
+    }
 
 
   block TemperatureTableInterpreter oftype TableInterpreter {
@@ -41,7 +47,8 @@ pipeline TemperaturePipeline {
             "producer" oftype text,
             "model" oftype text,
             "month" oftype text,
-            "temperature" oftype decimal
+            "temperature" oftype decimal,
+            "battery_temperature" oftype decimal
             
         ];
     }
@@ -57,6 +64,11 @@ pipeline TemperaturePipeline {
    outputColumn: 'temperature';
    use: CelsiusToFahrenheit;
  }
+  block CelsiusToFahrenheitTransformerBattery oftype TableTransformer {
+   inputColumns: ['battery_temperature'];
+   outputColumn: 'battery_temperature';
+   use: CelsiusToFahrenheit;
+ }
     block DatabaseLoader oftype SQLiteLoader {
         table: "temperatures";
         file: "./temperatures.sqlite";
@@ -68,8 +80,10 @@ pipeline TemperaturePipeline {
         ->TempFIleTextType
         ->TemperatureCSVInterpreter
         ->TempChangeHeader
+        ->BatteryHeader
         ->TemperatureTableInterpreter
         ->CelsiusToFahrenheitTransformer
+        ->CelsiusToFahrenheitTransformerBattery
         -> DatabaseLoader;
         
 }
