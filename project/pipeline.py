@@ -52,7 +52,7 @@ numeric_columns = sea_level_data_original.select_dtypes(include='number').column
 numeric_columns = [col for col in numeric_columns if col != 'Year']  # Exclude 'Year' column
 
 # Aggregate sea level data by year to prepare for merging
-sea_level_data_agg = sea_level_data_original.groupby(['Year' , "ق"])[numeric_columns].mean().reset_index()
+sea_level_data_agg = sea_level_data_original.groupby(['Year' , "Measure"])[numeric_columns].mean().reset_index()
 # Restructure temperature data to focus on years and temperature change values
 temperature_data_long = temperature_data.melt(
     id_vars=['Country', 'ISO2', 'ISO3', 'Indicator', 'Unit', 'Source', 'CTS_Code', 'CTS_Name', 'CTS_Full_Descriptor'],
@@ -107,6 +107,6 @@ print("merged data " ,merged_data_cleaned.head())
 
 
 
-conn = sqlite3.connect('../data/temperature_sea_level_data.db')
+conn = sqlite3.connect('../data/temperature_sea_level_data.sqlite')
 merged_data_cleaned.to_sql('Temperature_Sea_Level', conn, if_exists='replace', index=False)
 conn.close()
