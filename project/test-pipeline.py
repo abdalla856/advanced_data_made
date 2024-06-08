@@ -28,7 +28,7 @@ def test_data_cleaning():
     assert 'Date' in sea_level_data_original.columns, "Date column is missing"
     assert sea_level_data_original['Date'].dtype == 'datetime64[ns]', "Date column is not in datetime format"
     assert 'Year' in sea_level_data_original.columns, "Year column is missing"
-    assert sea_level_data_original['Year'].dtype == 'int32', "Year column is not in integer format"
+    assert sea_level_data_original['Year'].dtype == 'int64', "Year column is not in integer format"
 
 def test_data_merging():
     url_temp = "https://opendata.arcgis.com/datasets/4063314923d74187be9596f10d034914_0.csv"
@@ -62,7 +62,7 @@ def test_data_merging():
     assert 'Temperature_Change' in merged_data_cleaned.columns, "Temperature_Change column is missing in merged data"
 
 def test_database_content():
-    db_path = '../data/temperature_sea_level_data.sqlite'
+    db_path = 'data/temperature_sea_level_data.sqlite'
     conn = sqlite3.connect(db_path)
 
     df = pd.read_sql_query("SELECT * FROM Temperature_Sea_Level", conn)
@@ -74,7 +74,7 @@ def test_database_content():
     conn.close()
 
 def test_data_pipeline_output():
-    db_path = '../data/temperature_sea_level_data.sqlite'
+    db_path = 'data/temperature_sea_level_data.sqlite'
 
     # Check if the database file is created
     assert os.path.exists(db_path), "Output database file does not exist"
