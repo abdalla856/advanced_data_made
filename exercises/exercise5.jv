@@ -57,7 +57,7 @@ pipeline GtfsPipeline {
 }
 
 
-constraint ZONE on integer : value != 1645 ;
+constraint ZONE on integer : value == 1645 ;
 
 valuetype IDZONE oftype integer {
     constraints :[ZONE];
