@@ -66,14 +66,17 @@ valuetype IDZONE oftype integer {
 valuetype rangecontraints oftype decimal {
     // 10. Valuetypes can be further refined by providing constraints.
     constraints: [
-        Rangelower,
-        RangeUpper,
+       RangeConstraints
    
     ];
 }
 
-constraint Rangelower on decimal : value > -90.0 ;
-constraint RangeUpper on decimal : value < 90.0 ;
+constraint RangeConstraints oftype RangeConstraint {
+    lowerBound: -90.0;
+    lowerBoundInclusive: true;
+    upperBound: 90.0;
+    upperBoundInclusive: true;
+}
 
 
 //   constraint invalidRows oftype DenylistConstraint {
