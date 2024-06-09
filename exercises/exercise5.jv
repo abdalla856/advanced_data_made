@@ -38,11 +38,12 @@ pipeline GtfsPipeline {
         header: true;
         columns:[
             "stop_id" oftype integer,
-            "stop_name" oftype text,
+            "stop_name" oftype deleteRows,
             "stop_lat" oftype rangecontraints,
     
             "stop_lon" oftype decimal,
             "zone_id" oftype IDZONE,
+       
         ];
     }
 
@@ -56,7 +57,7 @@ pipeline GtfsPipeline {
 }
 
 
-constraint ZONE on integer : value == 1645 ;
+constraint ZONE on integer : value != 1645 ;
 
 valuetype IDZONE oftype integer {
     constraints :[ZONE];
@@ -66,7 +67,16 @@ valuetype IDZONE oftype integer {
 valuetype rangecontraints oftype decimal {
     // 10. Valuetypes can be further refined by providing constraints.
     constraints: [
-       RangeConstraints
+       RangeConstraints,
+     
+   
+    ];
+}
+valuetype deleteRows oftype text {
+    // 10. Valuetypes can be further refined by providing constraints.
+    constraints: [
+   
+       invalidRows
    
     ];
 }
@@ -79,6 +89,6 @@ constraint RangeConstraints oftype RangeConstraint {
 }
 
 
-//   constraint invalidRows oftype DenylistConstraint {
-//    denylist: ["Nan", " ", "Null"];
-//  }
+  constraint invalidRows oftype DenylistConstraint {
+   denylist: ["Nan", " ", "Null" ,"" ];
+ }
