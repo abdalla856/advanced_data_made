@@ -8,7 +8,7 @@ pipeline GoodPipeline {
     }
 
     block GoodTextFileInterpreter oftype TextFileInterpreter {
-        encoding: "latin2";
+        encoding: "utf8";
     }
     
     block GoodCSVInterpreter oftype CSVInterpreter {
