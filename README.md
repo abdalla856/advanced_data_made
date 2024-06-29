@@ -14,8 +14,9 @@ To get started, please follow these steps:
 For example, if your user is _myuser_ and your repo is _myrepo_, then update the badge for _exercise 1_ to `![](https://byob.yarr.is/myrepo/myuser/score_ex1)`. Proceed with the remaining badges accordingly.
 
 
-## Project Work
+## Project Work - correlation between temperature change and sea level change
 Your data engineering project will run alongside lectures during the semester. We will ask you to regularly submit project work as milestones so you can reasonably pace your work. All project work submissions **must** be placed in the `project` folder.
+Our Project is to see the correlation between temperature change and sea level change. 
 
 ### Exporting a Jupyter Notebook
 Jupyter Notebooks can be exported using `nbconvert` (`pip install nbconvert`). For example, to export the example notebook to html: `jupyter nbconvert --to html examples/final-report-example.ipynb --embed-images --output final-report.html`
